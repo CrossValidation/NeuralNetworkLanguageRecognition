@@ -47,3 +47,22 @@ class Encoder(object):
         Constructor
         '''
         
+    def translateWord(self,word="Hello"):
+        i = 0
+        wordOutput = ""
+        if len(word) <= 10:
+            while (i<10):
+                if(i < len(word)):
+                    wordOutput = wordOutput + dict.get(word[i])
+                else:
+                    wordOutput = wordOutput + dict.get('&')
+                i += 1
+        print(wordOutput)
+                
+            
+            
+        
+        
+        
+        
+        
