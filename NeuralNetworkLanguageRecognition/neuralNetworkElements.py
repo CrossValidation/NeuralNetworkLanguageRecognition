@@ -1,5 +1,5 @@
 import random
-
+import math
 
 class Element(object):
     def activated(self):
@@ -35,11 +35,18 @@ class Perceptron(Element):
         # todo
         pass
         
-    def activated(self):
+    def activated(self):       
+        if self.entryPoint() > self.treshold:
+            return 1
+        else:
+            return 0    
+    
+    def fi(self):
+        return 1/(1 + math.exp(-self.entryPoint()))
+    
+    def entryPoint(self):
         summatory = 0
         for perceptronInput in self.inputs:
             summatory += perceptronInput["input"].activated() * perceptronInput["weight"]
-        if summatory > self.treshold:
-            return 1
-        else:
-            return 0
+        return summatory
+        
