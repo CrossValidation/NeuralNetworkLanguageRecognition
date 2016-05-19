@@ -1,3 +1,4 @@
+# coding=utf-8
 '''
 Created on 12/mag/2016
 
@@ -42,7 +43,7 @@ class Encoder(object):
             "ù": "11111"           
                         }
 
-    def __init__(self, params):
+    def __init__(self):
         '''
         Constructor
         '''
@@ -53,9 +54,9 @@ class Encoder(object):
         if len(word) <= 10:
             while (i<10):
                 if(i < len(word)):
-                    wordOutput = wordOutput + dict.get(word[i])
+                    wordOutput = wordOutput + self.dict[word[i]]
                 else:
-                    wordOutput = wordOutput + dict.get('&')
+                    wordOutput = wordOutput + self.dict['&']
                 i += 1
         print(wordOutput)
                 
