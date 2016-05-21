@@ -1,9 +1,7 @@
 # coding=utf-8
-'''
-Created on 12/mag/2016
-
-@author: lorenzo
-'''
+import os
+import csv
+from NeuralNetworkLanguageRecognition.wordAndValue import wordAndValue
 
 class Encoder(object):
     '''
@@ -42,28 +40,65 @@ class Encoder(object):
             "ò": "11110",
             "ù": "11111"           
                         }
+    firstReadTraining = True
+    trainingDataset = {}
+    firstReadValidation = True
+    validationDataset = {}
+    valueEncoded = []
+    
 
     def __init__(self):
         '''
         Constructor
         '''
         
-    def translateWord(self,word="Hello"):
+    def translateWord(self, word):
         i = 0
         wordOutput = ""
         if len(word) <= 10:
-            while (i<10):
+            while i<10:
+                #x = dict.get(word[i], "pippo")
+                #if  x == 'pippo':
+                    #print(word[i])
                 if(i < len(word)):
-                    wordOutput = wordOutput + self.dict[word[i]]
+                    try:
+                        wordOutput = wordOutput + self.dict[word[i]] #encode word
+                    except KeyError:
+                        wordOutput = "default"
                 else:
-                    wordOutput = wordOutput + self.dict['&']
+                    wordOutput = wordOutput + self.dict['&'] #add padding
                 i += 1
-        print(wordOutput)
-                
-            
-            
+        return(wordOutput)
         
-        
-        
-        
-        
+    def getWord(self, type, offset, n): #type is either training or validation
+        self.valueEncoded[:] = []
+        if type== 0:
+            if self.firstReadTraining == True: 
+                self.firstReadTraining = False
+                file_path = os.path.join(os.path.dirname(__file__), "./dataset/training_dataset.csv")            
+                with open(file_path, 'r') as csvfile:
+                    reader = csv.DictReader(csvfile,delimiter=';')
+                    for index,row in enumerate(reader):  
+                        self.trainingDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1]) 
+                        if index >= offset and index < offset + n:
+                            #encoded=self.translateWord(row[None][0])
+                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1]))
+            else:
+                while offset <= offset + n:
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[offset].getWord()), self.trainingDataset[offset].getValue()))
+                    offset = offset + 1
+        if type== 1:
+            if self.firstReadValidation == True: 
+                self.firstReadValidation = False
+                file_path = os.path.join(os.path.dirname(__file__), "./dataset/validation_dataset.csv")            
+                with open(file_path, 'r') as csvfile:
+                    reader = csv.DictReader(csvfile,delimiter=';')
+                    for index,row in enumerate(reader):  
+                        self.validationDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1]) 
+                        if index >= offset and index < offset + n:
+                            #encoded=self.translateWord(row[None][0])
+                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1]))
+            else:
+                while offset <= offset + n:
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[offset].getWord()), self.validationDataset[offset].getValue()))
+                    offset = offset + 1
