@@ -91,7 +91,7 @@ class Encoder(object):
             else:
                 index_training = offset
                 while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[index_training].getWord()), self.trainingDataset[index_training].getValue()))
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[index_training].word), self.trainingDataset[index_training].value))
                     index_training = index_training + 1
         if type == 1:          
             if self.firstReadValidation == True: 
@@ -107,6 +107,6 @@ class Encoder(object):
             else:
                 index_training = offset
                 while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[index_training].getWord()), self.validationDataset[index_training].getValue()))
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[index_training].word), self.validationDataset[index_training].value))
                     index_training = index_training + 1
         return self.valueEncoded

@@ -17,9 +17,4 @@ class wordAndValue(object):
         self.word = word
         self.value = value
         self.result = -1
-        
-    def getWord(self):
-        return self.word
-    def getValue(self):
-        return self.value
     
