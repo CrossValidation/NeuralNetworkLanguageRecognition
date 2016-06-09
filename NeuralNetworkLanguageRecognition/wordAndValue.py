@@ -1,8 +1,3 @@
-'''
-Created on 20/mag/2016
-
-@author: lorenzo
-'''
 
 class wordAndValue(object):
     '''

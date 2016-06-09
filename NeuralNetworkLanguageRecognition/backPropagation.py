@@ -10,7 +10,7 @@ def computeFormula(perceptronOutput, n = 0.5, expected = 1):
     #ej = dj - yj: compute error at neuron j as difference between what I expected and the obtained output (yj)
     ej=expected-yj    
     #fiprimo = yj[1-yj]
-    fiprimoj=yj*(1-yj)   
+    fiprimoj=fiprimo(perceptronOutput.entryPoint())  
     #dj = ej * fiprimo (see formula [A]): compute delta_j as product of error at j and derivative applied to output
     dj=ej*fiprimoj
         
