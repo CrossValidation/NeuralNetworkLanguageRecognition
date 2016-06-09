@@ -2,21 +2,20 @@ import random
 import math
 
 class Element(object):
-    def activated(self):
+    def fi(self):
         pass
 
 class Input(Element):
     
-    def __init__(self, activate=0):
-        self.isActivate = activate
+    def __init__(self, value=0):
+        self.value = value
     
-    def activated(self):
-        return self.isActivate
+    def fi(self):
+        return self.value
 
 class Perceptron(Element):
     
-    def __init__(self, inputs, treshold=0, weights=[]):
-        self.treshold = 0
+    def __init__(self, inputs, weights=[]):
         self.inputs = []
         if len(weights) == 0:
             randomWeigths = True
@@ -34,19 +33,13 @@ class Perceptron(Element):
     def weightsUpdate(self):
         # todo
         pass
-        
-    def activated(self):       
-        if self.entryPoint() > self.treshold:
-            return 1
-        else:
-            return 0    
-    
+
     def fi(self):
-        return 1/(1 + math.exp(-self.entryPoint()))
+        return 1 / (1 + math.exp(-self.entryPoint()))
     
     def entryPoint(self):
         summatory = 0
         for perceptronInput in self.inputs:
-            summatory += perceptronInput["input"].activated() * perceptronInput["weight"]
+            summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
         return summatory
         
