@@ -48,10 +48,15 @@ class Encoder(object):
     valueEncoded = []
     
 
-    def __init__(self):
-        '''
-        Constructor
-        '''
+    def __init__(self, k):
+        self.k = k
+        self.max = 9592
+        file_path = os.path.join(os.path.dirname(__file__), "dataset/final_dataset.csv")            
+        with open(file_path, 'r') as csvfile:
+            reader = csv.DictReader(csvfile,delimiter=';')
+            for index,row in enumerate(reader):
+                self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1], row[None][0]))
+
         
     def translateWord(self, word):
         i = 0
@@ -75,39 +80,20 @@ class Encoder(object):
                 i += 1
         return(wordOutput)
         
-    def getWord(self, type, offset, n): #type is either training or validation
-        self.valueEncoded[:] = []
-        if type== 0:
-            if self.firstReadTraining == True: 
-                self.firstReadTraining = False
-                file_path = os.path.join(os.path.dirname(__file__), "dataset/training_dataset.csv")            
-                with open(file_path, 'r') as csvfile:
-                    reader = csv.DictReader(csvfile,delimiter=';')
-                    for index,row in enumerate(reader):  
-                        rowprova = row[None][0].decode('utf-8')
-                        self.trainingDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1],row[None][0]) 
-                        if index >= offset and index < offset + n:
-                            #encoded=self.translateWord(row[None][0])
-                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1], row[None][0]))
-            else:
-                index_training = offset
-                while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[index_training].word), self.trainingDataset[index_training].value, row[None][0]))
-                    index_training = index_training + 1
-        if type == 1:          
-            if self.firstReadValidation == True: 
-                self.firstReadValidation = False
-                file_path = os.path.join(os.path.dirname(__file__), "./dataset/validation_dataset.csv")            
-                with open(file_path, 'r') as csvfile:
-                    reader = csv.DictReader(csvfile,delimiter=';')
-                    for index,row in enumerate(reader):  
-                        self.validationDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1],row[None][0]) 
-                        if index >= offset and index < offset + n:
-                            #encoded=self.translateWord(row[None][0])
-                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1],row[None][0]))
-            else:
-                index_training = offset
-                while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[index_training].word), self.validationDataset[index_training].value,row[None][0]))
-                    index_training = index_training + 1
-        return self.valueEncoded
+    def getTesting(self, numIter):
+        testingSet = []
+        for testingElement in range((numIter-1)*int(self.max/self.k), numIter*int(self.max/self.k)+1):
+            testingSet.append(self.valueEncoded[testingElement])
+        return testingSet
+    
+    def getTraining(self, numIter):
+        trainingSet = []
+        if numIter > 1:
+            for trainingElement in range(0, (numIter-1)*int(self.max/self.k)):
+                trainingSet.append(self.valueEncoded[trainingElement])
+        if numIter < self.k:
+            for trainingElement in range((numIter)*int(self.max/self.k), self.max):
+                trainingSet.append(self.valueEncoded[trainingElement])    
+        return trainingSet
+            
+            
