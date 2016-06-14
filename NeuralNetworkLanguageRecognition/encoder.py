@@ -50,7 +50,7 @@ class Encoder(object):
 
     def __init__(self, k):
         self.k = k
-        self.max = 9592
+        self.max = 9591
         file_path = os.path.join(os.path.dirname(__file__), "dataset/final_dataset.csv")            
         with open(file_path, 'r') as csvfile:
             reader = csv.DictReader(csvfile,delimiter=';')

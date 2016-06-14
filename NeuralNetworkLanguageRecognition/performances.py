@@ -1,6 +1,6 @@
 class Performances(object):  
 
-    def __init__(self, params):
+    def __init__(self):
         #0 is Italian
         self.trueItalian = 0
         self.falseItalian = 0
@@ -14,8 +14,12 @@ class Performances(object):
         for computeObject in computeObjectList:
             target = computeObject.value
             result = computeObject.result
-            result = round(result)
-            if target == 1: #is  English word
+            if result <= 0.6:
+                result = 0
+            else:
+                result = 1
+            
+            if int(target) == 1: #is  English word
                 if  result == 1:
                     self.trueEnglish = self.trueEnglish + 1
                 else:

@@ -8,10 +8,11 @@ def crossValidation(output, inputLayer, numberIteration, learning=True):
     if (learning == True):
         examples = encoder.getTraining(numberIteration)
     else:
-        examples = encoder.getTest(numberIteration)
+        examples = encoder.getTesting(numberIteration)
     
     for wordAndValue in examples:
         word = wordAndValue.word
+        #print wordAndValue.originalWord
         assert (len(word) == 50)
         # update neural network input
         for index, inputObj in enumerate(inputLayer):
@@ -49,3 +50,9 @@ if __name__ == '__main__':
         testingExamples = crossValidation(output, inputLayer, index, learning=False)
         performancesObj = Performances()
         performances.append(performancesObj.updatePerformance(testingExamples))
+        print("Iterazione {}".format(index))
+        print("trueItalian: {}".format(performancesObj.trueItalian))
+        print("falseItalian: {}".format(performancesObj.falseItalian))
+        print("trueEnglish: {}".format(performancesObj.trueEnglish))
+        print("falseEnglish: {}".format(performancesObj.falseEnglish))
+        print("-------------------------------------------------")
