@@ -1,13 +1,9 @@
 # coding=utf-8
 import os
 import csv
-from NeuralNetworkLanguageRecognition.wordAndValue import wordAndValue
-from string import lower
+from NeuralNetworkLanguageRecognition.wordAndValue import WordAndValue
 
 class Encoder(object):
-    '''
-    classdocs
-    '''
     dict = {"&".decode('utf-8'): "00000",
             "a".decode('utf-8'): "00001",
             "b".decode('utf-8'): "00010",
@@ -47,28 +43,26 @@ class Encoder(object):
     validationDataset = {}
     valueEncoded = []
     
-
     def __init__(self, k):
         self.k = k
         self.max = 9591
         file_path = os.path.join(os.path.dirname(__file__), "dataset/final_dataset.csv")            
         with open(file_path, 'r') as csvfile:
-            reader = csv.DictReader(csvfile,delimiter=';')
-            for index,row in enumerate(reader):
-                self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1], row[None][0]))
+            reader = csv.DictReader(csvfile, delimiter=';')
+            for row in reader:
+                self.valueEncoded.append(WordAndValue(self.translateWord(row[None][0]), row[None][1], row[None][0]))
 
-        
     def translateWord(self, word):
         i = 0
         wordOutput = ""
         word = word.decode('utf-8')
         word = word.lower()
         if len(word) <= 10:
-            while i<10:
+            while i < 10:
                 if(i < len(word)):
                     try:
                         wordStr = word[i]
-                        wordOutput = wordOutput + self.dict[wordStr.lower()] #encode word
+                        wordOutput = wordOutput + self.dict[wordStr.lower()]  # encode word
                     except Exception as e:
                         print(e)
                         
@@ -76,24 +70,22 @@ class Encoder(object):
                         wordOutput = "default"
                         print (word[i])
                 else:
-                    wordOutput = wordOutput + self.dict['&'] #add padding
+                    wordOutput = wordOutput + self.dict['&']  # add padding
                 i += 1
         return(wordOutput)
         
     def getTesting(self, numIter):
         testingSet = []
-        for testingElement in range((numIter-1)*int(self.max/self.k), numIter*int(self.max/self.k)+1):
+        for testingElement in range((numIter - 1) * int(self.max / self.k), numIter * int(self.max / self.k) + 1):
             testingSet.append(self.valueEncoded[testingElement])
         return testingSet
     
     def getTraining(self, numIter):
         trainingSet = []
         if numIter > 1:
-            for trainingElement in range(0, (numIter-1)*int(self.max/self.k)):
+            for trainingElement in range(0, (numIter - 1) * int(self.max / self.k)):
                 trainingSet.append(self.valueEncoded[trainingElement])
         if numIter < self.k:
-            for trainingElement in range((numIter)*int(self.max/self.k), self.max):
+            for trainingElement in range((numIter) * int(self.max / self.k), self.max):
                 trainingSet.append(self.valueEncoded[trainingElement])    
         return trainingSet
-            
-            

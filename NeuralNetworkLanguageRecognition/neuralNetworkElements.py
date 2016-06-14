@@ -29,10 +29,6 @@ class Perceptron(Element):
             else:
                 dictionary["weight"] = weights[index]
             self.inputs.append(dictionary)
-        
-    def weightsUpdate(self):
-        # todo
-        pass
 
     def fi(self):
         return 1 / (1 + math.exp(-self.entryPoint()))
@@ -42,4 +38,3 @@ class Perceptron(Element):
         for perceptronInput in self.inputs:
             summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
         return summatory
-        
