@@ -3,7 +3,7 @@ from NeuralNetworkLanguageRecognition.encoder import Encoder
 from NeuralNetworkLanguageRecognition import backPropagation
 from NeuralNetworkLanguageRecognition.performances import Performances
 
-def crossValidation(output, inputLayer, learning=True, numberIteration):
+def crossValidation(output, inputLayer, numberIteration, learning=True):
     # get examples
     if (learning == True):
         examples = encoder.getTraining(numberIteration)
