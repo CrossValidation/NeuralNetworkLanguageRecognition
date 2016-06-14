@@ -57,6 +57,7 @@ class Encoder(object):
         i = 0
         wordOutput = ""
         word = word.decode('utf-8')
+        word = word.lower()
         if len(word) <= 10:
             while i<10:
                 if(i < len(word)):
@@ -84,14 +85,14 @@ class Encoder(object):
                     reader = csv.DictReader(csvfile,delimiter=';')
                     for index,row in enumerate(reader):  
                         rowprova = row[None][0].decode('utf-8')
-                        self.trainingDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1]) 
+                        self.trainingDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1],row[None][0]) 
                         if index >= offset and index < offset + n:
                             #encoded=self.translateWord(row[None][0])
-                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1]))
+                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1], row[None][0]))
             else:
                 index_training = offset
                 while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[index_training].word), self.trainingDataset[index_training].value))
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.trainingDataset[index_training].word), self.trainingDataset[index_training].value, row[None][0]))
                     index_training = index_training + 1
         if type == 1:          
             if self.firstReadValidation == True: 
@@ -100,13 +101,13 @@ class Encoder(object):
                 with open(file_path, 'r') as csvfile:
                     reader = csv.DictReader(csvfile,delimiter=';')
                     for index,row in enumerate(reader):  
-                        self.validationDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1]) 
+                        self.validationDataset[index] =  modelWordValue = wordAndValue(row[None][0],row[None][1],row[None][0]) 
                         if index >= offset and index < offset + n:
                             #encoded=self.translateWord(row[None][0])
-                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1]))
+                            self.valueEncoded.append(wordAndValue(self.translateWord(row[None][0]), row[None][1],row[None][0]))
             else:
                 index_training = offset
                 while index_training <= offset + n:
-                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[index_training].word), self.validationDataset[index_training].value))
+                    self.valueEncoded.append(wordAndValue(self.translateWord(self.validationDataset[index_training].word), self.validationDataset[index_training].value,row[None][0]))
                     index_training = index_training + 1
         return self.valueEncoded
