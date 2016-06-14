@@ -7,7 +7,7 @@ class Element(object):
     def fi(self):
         pass
     
-    def toString(self, level=0):
+    def toString(self, levels=[{'level' :0, 'last': False}]):
         pass
 
 class Input(Element):
@@ -18,7 +18,7 @@ class Input(Element):
     def fi(self):
         return self.value
     
-    def toString(self, level=0):
+    def toString(self, levels=[{'level' :0, 'last': False}]):
         return str(self.value)
 
 class Perceptron(Element):
@@ -43,23 +43,31 @@ class Perceptron(Element):
     
     def entryPoint(self):
         summatory = 0
-        try:
-            for perceptronInput in self.inputs:
-                summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
-        except Exception as e:
-            print (e)
+        for perceptronInput in self.inputs:
+            summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
         return summatory
     
-    def toString(self, level=0):
+    def toString(self, levels=[{'level' :0, 'last': False}]):
+        level = levels[-1]['level']
+        last = levels[-1]['last']
         string = "Perceptron\n"
         for index, perceptronInput in enumerate(self.inputs):
             spaces = ""
-            for _ in range (0, level, TO_STRING_OFFSET):
-                spaces = spaces + "|"
+            for levelInfo in levels[1 : len (levels)]:
+                if levelInfo['last'] == True:
+                    spaces = spaces + " "
+                else:
+                    spaces = spaces + "|"
                 spaces = spaces + " "* TO_STRING_OFFSET
+            if (index < (len(self.inputs) - 1)):
+                last = False
+            else:
+                last = True
             string = string + spaces
             string = string + "|---[{}]---".format(perceptronInput["weight"])
-            string = string + perceptronInput["input"].toString(level=level + TO_STRING_OFFSET)
+            newLevels = levels[:]
+            newLevels.append({'level' :level+TO_STRING_OFFSET, 'last': last})
+            string = string + perceptronInput["input"].toString(levels=newLevels)
             if (index < (len(self.inputs) - 1)):
                 string = string + "\n"
             else:
