@@ -1,48 +1,51 @@
 from NeuralNetworkLanguageRecognition.neuralNetworkElements import Perceptron, Input
 from NeuralNetworkLanguageRecognition.encoder import Encoder
 from NeuralNetworkLanguageRecognition import backPropagation
-import numpy as np
+from NeuralNetworkLanguageRecognition.performances import Performances
 
-if __name__ == '__main__':
+def crossValidation(output, inputLayer, learning=True, numberIteration):
+    # get examples
+    if (learning == True):
+        examples = encoder.getTraining(numberIteration)
+    else:
+        examples = encoder.getTest(numberIteration)
     
-    #creation of neural network
+    for wordAndValue in examples:
+        word = wordAndValue.word
+        assert (len(word) == 50)
+        # update neural network input
+        for index, inputObj in enumerate(inputLayer):
+                inputObj.value = int(word[index])
+        if (learning == True):
+            # learning
+            backPropagation.computeFormula(output, expected=float(wordAndValue.value), n=0.5)
+        else:
+            wordAndValue.result = output.fi()
+    
+    if learning == False:
+        return examples
+
+def createNeuralNetwork ():
+    # creation of neural network
+    inputLayer = []
+    for index in range(0, 50):
+        inputLayer.append(Input())
     firstLayer = []
     for index in range(0, 50, 5):
-            firstLayer.append(Perceptron(inputs=[Input(),Input(),Input(),Input(),Input()]))
+        firstLayer.append(Perceptron(inputs=inputLayer[index : index + 5]))
     secondLayer = []
     for index in range(0, len(firstLayer), 2):
         secondLayer.append(Perceptron(inputs=[firstLayer[index],
-                                              firstLayer[index+1]]))
+                                              firstLayer[index + 1]]))
     output = Perceptron(inputs=secondLayer)
-    
-    #get training examples
-    encoder = Encoder()
-    trainingExamples = encoder.getWord(0, 0, 500)
-      
-    #training
-    for wordAndValue in trainingExamples:
-        word = wordAndValue.word
-        assert (len(word) == 50)
-        #update neural network input
-        for index, perceptron in enumerate(firstLayer):
-            for indexInput, inputPerceptron in enumerate(perceptron.inputs):
-                inputPerceptron["input"].value = int(word[(index*5+ indexInput)])
-        #learning
-        backPropagation.computeFormula(output, expected=float(wordAndValue.value), n=0.5)
-    
-    #get testing examples
-    encoder = Encoder()
-    testingExamples = encoder.getWord(1, 0, 100)
-      
-    #testing
-    for wordAndValue in testingExamples:
-        word = wordAndValue.word
-        assert (len(word) == 50)
-        #update neural network input
-        for index, perceptron in enumerate(firstLayer):
-            for indexInput, inputPerceptron in enumerate(perceptron.inputs):
-                inputPerceptron["input"].value = int(word[(index*5+ indexInput)])
-        wordAndValue.result = output.fi()
-        
-    for example in testingExamples:
-        print ("word:{} value:{} result:{}".format(example.word, example.value, example.result))
+    return output, inputLayer 
+
+if __name__ == '__main__':
+    encoder = Encoder(10)
+    performances = []
+    for index in range(1, 11):
+        output, inputLayer = createNeuralNetwork()
+        crossValidation(output, inputLayer, index, learning=True)
+        testingExamples = crossValidation(output, inputLayer, index, learning=False)
+        performancesObj = Performances()
+        performances.append(performancesObj.updatePerformance(testingExamples))

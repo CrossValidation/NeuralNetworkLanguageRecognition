@@ -1,20 +1,6 @@
-'''
-Created on 09/giu/2016
-
-@author: lorenzo
-'''
-from CodeWarrior.CodeWarrior_suite import target
-
-class performances(object):
-    '''
-    classdocs
-    '''
-    
+class Performances(object):  
 
     def __init__(self, params):
-        '''
-        Constructor
-        '''
         #0 is Italian
         self.trueItalian = 0
         self.falseItalian = 0
