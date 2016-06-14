@@ -28,18 +28,16 @@ class Perceptron(Element):
                 dictionary["weight"] = random.uniform(-0.5, 0.5)
             else:
                 dictionary["weight"] = weights[index]
-            self.inputs.append(dictionary)
-        
-    def weightsUpdate(self):
-        # todo
-        pass
+            self.inputs.append(dictionary)  
 
     def fi(self):
         return 1 / (1 + math.exp(-self.entryPoint()))
     
     def entryPoint(self):
         summatory = 0
-        for perceptronInput in self.inputs:
-            summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
+        try:
+            for perceptronInput in self.inputs:
+                summatory += perceptronInput["input"].fi() * perceptronInput["weight"]
+        except Exception as e:
+            print (e)
         return summatory
-        

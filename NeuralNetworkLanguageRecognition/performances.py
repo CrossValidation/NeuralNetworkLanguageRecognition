@@ -42,8 +42,8 @@ class Performances(object):
         self.trueEnglishs.append(self.trueEnglish)
         self.falseEnglishs.append(self.falseEnglish)
         out_file = open(self.nameFile,"a")
-        out_file.write("Iterazione: {} ".format(numIter))
-        out_file.write("Network: {} ".format(numNet))
+        out_file.write("Iteration: {} ".format(numIter))
+        out_file.write("Network: {} \n".format(numNet))
         out_file.write("trueItalian: {}\n".format(self.trueItalian))
         out_file.write("falseItalian: {}\n".format(self.falseItalian))
         out_file.write("trueEnglish: {}\n".format(self.trueEnglish))
@@ -51,8 +51,6 @@ class Performances(object):
         out_file.write("-------------------------------------------------\n")
         if numIter == self.k:
             out_file.write("Mean\n")
-            out_file.write("Iterazione: {} ".format(numIter))
-            out_file.write("Network: {} ".format(numNet))
             out_file.write("trueItalian: {}\n".format(self.meanTrueItalian()))
             out_file.write("falseItalian: {}\n".format(self.meanFalseItalian()))
             out_file.write("trueEnglish: {}\n".format(self.meanTrueEnglish()))
@@ -60,6 +58,7 @@ class Performances(object):
             out_file.write("ItalianCorrectnessRate: {}\n".format(self.italianCorrectnessRate()))
             out_file.write("EnglishCorrectnessRate: {}\n".format(self.englishCorrectnessRate()))
             out_file.write("TotalCorrectnessRate: {}\n".format(self.totalCorrectnessRate()))
+            out_file.write("\n\n")
         out_file.close()
     
         
