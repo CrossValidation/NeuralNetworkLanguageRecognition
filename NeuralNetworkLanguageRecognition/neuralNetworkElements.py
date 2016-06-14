@@ -1,6 +1,8 @@
 import random
 import math
 
+TO_STRING_OFFSET = 28
+
 class Element(object):
     def fi(self):
         pass
@@ -49,11 +51,17 @@ class Perceptron(Element):
         return summatory
     
     def toString(self, level=0):
-        str = "Perceptron\n"
-        for perceptronInput in self.inputs: 
-            spaces = " "* level
-            str = str + spaces
-            str = str + "|---[{}]---".format(perceptronInput["weight"])
-            str = str + perceptronInput["input"].toString(level=level + 30)
-            str = str + "\n"
-        return str
+        string = "Perceptron\n"
+        for index, perceptronInput in enumerate(self.inputs):
+            spaces = ""
+            for _ in range (0, level, TO_STRING_OFFSET):
+                spaces = spaces + "|"
+                spaces = spaces + " "* TO_STRING_OFFSET
+            string = string + spaces
+            string = string + "|---[{}]---".format(perceptronInput["weight"])
+            string = string + perceptronInput["input"].toString(level=level + TO_STRING_OFFSET)
+            if (index < (len(self.inputs) - 1)):
+                string = string + "\n"
+            else:
+                string = string + "\n" + spaces
+        return string
