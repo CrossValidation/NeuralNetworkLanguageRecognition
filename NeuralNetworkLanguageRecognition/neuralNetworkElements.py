@@ -4,6 +4,9 @@ import math
 class Element(object):
     def fi(self):
         pass
+    
+    def toString(self, level=0):
+        pass
 
 class Input(Element):
     
@@ -12,6 +15,9 @@ class Input(Element):
     
     def fi(self):
         return self.value
+    
+    def toString(self, level=0):
+        return str(self.value)
 
 class Perceptron(Element):
     
@@ -41,3 +47,13 @@ class Perceptron(Element):
         except Exception as e:
             print (e)
         return summatory
+    
+    def toString(self, level=0):
+        str = "Perceptron\n"
+        for perceptronInput in self.inputs: 
+            spaces = " "* level
+            str = str + spaces
+            str = str + "|---[{}]---".format(perceptronInput["weight"])
+            str = str + perceptronInput["input"].toString(level=level + 30)
+            str = str + "\n"
+        return str
