@@ -17,6 +17,7 @@ def computeFormula(perceptronOutput, n=0.5, expected=1):
     # until now we have computed the deltas for the output layer: from here, we have to back-propagate them
     deltaw = [] 
     d = []
+    d.append(dj)
     nextl = []  
     nextl.append(perceptronOutput)  
     
@@ -37,6 +38,7 @@ def computeFormula(perceptronOutput, n=0.5, expected=1):
     # delta_wij = n * dj * yi (see formula [A])
     for currentPerceptron in nextl:
         if(currentPerceptron.inputs):
+            dj =d.pop(0)
             layer = currentPerceptron.inputs  
             # in the following "for" I iterate over the perceptrons in input to the current perceptron
             for yi in layer:
