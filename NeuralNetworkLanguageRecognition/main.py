@@ -12,7 +12,6 @@ def crossValidation(output, inputLayer, numberIteration, learning=True):
     
     for wordAndValue in examples:
         word = wordAndValue.word
-        #print wordAndValue.originalWord
         assert (len(word) == 50)
         # update neural network input
         for index, inputObj in enumerate(inputLayer):
@@ -26,7 +25,7 @@ def crossValidation(output, inputLayer, numberIteration, learning=True):
     if learning == False:
         return examples
 
-def createNeuralNetwork (numberOfNetwork = 0):
+def createNeuralNetwork (numberOfNetwork=0):
     # creation of neural network
     inputLayer = []
     for index in range(0, 50):
@@ -84,10 +83,10 @@ def createNeuralNetwork (numberOfNetwork = 0):
 if __name__ == '__main__':
     encoder = Encoder(10)
     performancesObj = Performances(10)
-    for numberOfNetwork in range(0,5):
-        output, inputLayer = createNeuralNetwork(numberOfNetwork)
+    for numberOfNetwork in range(0, 5):
         performances = []
         for index in range(1, 11):
+            output, inputLayer = createNeuralNetwork(numberOfNetwork)
             crossValidation(output, inputLayer, index, learning=True)
             testingExamples = crossValidation(output, inputLayer, index, learning=False)
             performances.append(performancesObj.updatePerformance(testingExamples, index, numberOfNetwork, output))
