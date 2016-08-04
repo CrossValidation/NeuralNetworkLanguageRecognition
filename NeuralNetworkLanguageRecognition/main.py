@@ -84,9 +84,8 @@ if __name__ == '__main__':
     encoder = Encoder(10)
     performancesObj = Performances(10)
     for numberOfNetwork in range(0, 5):
-        performances = []
         for index in range(1, 11):
             output, inputLayer = createNeuralNetwork(numberOfNetwork)
             crossValidation(output, inputLayer, index, learning=True)
             testingExamples = crossValidation(output, inputLayer, index, learning=False)
-            performances.append(performancesObj.updatePerformance(testingExamples, index, numberOfNetwork, output))
+            performancesObj.updatePerformance(testingExamples, index, numberOfNetwork, output)
